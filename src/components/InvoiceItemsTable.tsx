@@ -16,16 +16,13 @@ import {
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
-const { Option } = Select;
 
 const InvoiceItemsTable = () => {
   const [items, setItems] = useState([
     { key: "1", item: "", description: "", qty: 1, price: 0 },
   ]);
   const [discount, setDiscount] = useState<number>(0);
-  const [discountType, setDiscountType] = useState<"percent" | "nominal">(
-    "percent"
-  );
+  const [discountType, setDiscountType] = useState<"percent" | "nominal">("percent");
   const [vat, setVat] = useState<number>(0); // percentage
 
   const handleChange = (value: any, key: string, column: string) => {
@@ -79,9 +76,7 @@ const InvoiceItemsTable = () => {
       render: (_: any, record: any) => (
         <Input
           value={record.description}
-          onChange={(e) =>
-            handleChange(e.target.value, record.key, "description")
-          }
+          onChange={(e) => handleChange(e.target.value, record.key, "description")}
         />
       ),
     },
@@ -146,27 +141,25 @@ const InvoiceItemsTable = () => {
         summary={() => (
           <>
             <Table.Summary.Row>
-              <Table.Summary.Cell colSpan={4} align="right">
+              <Table.Summary.Cell index={0} colSpan={4} align="right">
                 <Text strong>Subtotal</Text>
               </Table.Summary.Cell>
-              <Table.Summary.Cell colSpan={2}>
+              <Table.Summary.Cell index={1} colSpan={2}>
                 Rp {subtotal.toLocaleString("id-ID")}
               </Table.Summary.Cell>
             </Table.Summary.Row>
 
             <Table.Summary.Row>
-              <Table.Summary.Cell colSpan={4} align="right">
+              <Table.Summary.Cell index={0} colSpan={4} align="right">
                 <Space>
                   <Text strong>Discount</Text>
                   <Select
                     value={discountType}
-                    onChange={(val) =>
-                      setDiscountType(val as "percent" | "nominal")
-                    }
-                    style={{ width: 100 }}
+                    onChange={(val) => setDiscountType(val)}
+                    style={{ width: 80 }}
                   >
-                    <Option value="percent">%</Option>
-                    <Option value="nominal">Rp</Option>
+                    <Select.Option value="percent">%</Select.Option>
+                    <Select.Option value="nominal">Rp</Select.Option>
                   </Select>
                   <InputNumber
                     min={0}
@@ -175,13 +168,13 @@ const InvoiceItemsTable = () => {
                   />
                 </Space>
               </Table.Summary.Cell>
-              <Table.Summary.Cell colSpan={2}>
+              <Table.Summary.Cell index={1} colSpan={2}>
                 - Rp {discountAmount.toLocaleString("id-ID")}
               </Table.Summary.Cell>
             </Table.Summary.Row>
 
             <Table.Summary.Row>
-              <Table.Summary.Cell colSpan={4} align="right">
+              <Table.Summary.Cell index={0} colSpan={4} align="right">
                 <Space>
                   <Text strong>VAT (%)</Text>
                   <InputNumber
@@ -192,16 +185,16 @@ const InvoiceItemsTable = () => {
                   />
                 </Space>
               </Table.Summary.Cell>
-              <Table.Summary.Cell colSpan={2}>
+              <Table.Summary.Cell index={1} colSpan={2}>
                 + Rp {vatAmount.toLocaleString("id-ID")}
               </Table.Summary.Cell>
             </Table.Summary.Row>
 
             <Table.Summary.Row>
-              <Table.Summary.Cell colSpan={4} align="right">
+              <Table.Summary.Cell index={0} colSpan={4} align="right">
                 <Text strong>Total</Text>
               </Table.Summary.Cell>
-              <Table.Summary.Cell colSpan={2}>
+              <Table.Summary.Cell index={1} colSpan={2}>
                 <Text strong style={{ color: "#1677ff" }}>
                   Rp {total.toLocaleString("id-ID")}
                 </Text>
