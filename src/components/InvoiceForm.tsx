@@ -23,7 +23,7 @@ import {
   FilePdfOutlined,
 } from "@ant-design/icons";
 import InvoiceItemsTable from "./InvoiceItemsTable";
-const html2pdf = require("html2pdf.js");
+import dynamic from "next/dynamic";
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -63,13 +63,16 @@ const InvoiceForm = () => {
     printRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handlePDF = () => {
+    const handlePDF = async () => {
     if (!printRef.current) return;
+
+    const html2pdf = (await import("html2pdf.js")).default;
+
     html2pdf()
-      .set({ margin: 0.5, filename: "invoice.pdf", html2canvas: { scale: 2 } })
-      .from(printRef.current)
-      .save();
-  };
+        .set({ margin: 0.5, filename: "invoice.pdf", html2canvas: { scale: 2 } })
+        .from(printRef.current)
+        .save();
+    };
 
   return (
     <Row gutter={24}>
