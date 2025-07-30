@@ -23,7 +23,7 @@ import {
   FilePdfOutlined,
 } from "@ant-design/icons";
 import InvoiceItemsTable from "./InvoiceItemsTable";
-import html2pdf from "html2pdf.js";
+const html2pdf = require("html2pdf.js");
 
 const { TextArea } = Input;
 const { Text } = Typography;
