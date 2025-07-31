@@ -1,4 +1,3 @@
-// InvoiceItemsTable.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -17,6 +16,7 @@ import {
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
+const { Option } = Select;
 
 interface Item {
   key: string;
@@ -36,7 +36,7 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
   ]);
   const [discount, setDiscount] = useState<number>(0);
   const [discountType, setDiscountType] = useState<"percent" | "nominal">("percent");
-  const [vat, setVat] = useState<number>(0); // percentage
+  const [vat, setVat] = useState<number>(0);
 
   const handleChange = (value: any, key: string, column: keyof Item) => {
     const updated = items.map((item) =>
@@ -46,7 +46,7 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
   };
 
   const handleAdd = () => {
-    const newItem = {
+    const newItem: Item = {
       key: Date.now().toString(),
       item: "",
       description: "",
@@ -60,17 +60,14 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
     setItems(items.filter((item) => item.key !== key));
   };
 
-  const subtotal = items.reduce((total, item) => (total + (item.qty || 0) * (item.price || 0)), 0);
-
+  const subtotal = items.reduce((total, item) => total + item.qty * item.price, 0);
   const discountAmount =
     discountType === "percent"
       ? (subtotal * discount) / 100
       : Math.min(discount, subtotal);
-
   const vatAmount = ((subtotal - discountAmount) * vat) / 100;
   const total = subtotal - discountAmount + vatAmount;
 
-  // 🔄 Sync ke parent
   useEffect(() => {
     onChange(items, discountAmount, vatAmount);
   }, [items, discount, vat]);
@@ -80,28 +77,29 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
       title: "Item",
       dataIndex: "item",
       render: (_: any, record: Item) => (
-        <Input value={record.item} onChange={(e) => handleChange(e.target.value, record.key, "item")} />
+        <Input
+          value={record.item}
+          onChange={(e) => handleChange(e.target.value, record.key, "item")}
+        />
       ),
     },
-    // {
-    //   title: "Description",
-    //   dataIndex: "description",
-    //   render: (_: any, record: Item) => (
-    //     <Input value={record.description} onChange={(e) => handleChange(e.target.value, record.key, "description")} />
-    //   ),
-    // },
     {
       title: "Qty",
       dataIndex: "qty",
-      width: 240,
+      width: 180,
       render: (_: any, record: Item) => (
-        <InputNumber style={{ width: "100%" }} min={1} value={record.qty} onChange={(val) => handleChange(val, record.key, "qty")} />
+        <InputNumber
+          style={{ width: "100%" }}
+          min={1}
+          value={record.qty}
+          onChange={(val) => handleChange(val, record.key, "qty")}
+        />
       ),
     },
     {
       title: "Price",
       dataIndex: "price",
-      width: 240,
+      width: 180,
       render: (_: any, record: Item) => (
         <InputNumber
           style={{ width: "100%" }}
@@ -109,7 +107,7 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
           formatter={(val) => `Rp ${val}`}
           parser={(val) => {
             const cleaned = val?.replace(/[^\d]/g, "") || "0";
-            return Number.isNaN(Number(cleaned)) ? 0 : Number(cleaned);
+            return Number(cleaned);
           }}
           value={record.price}
           onChange={(val) => handleChange(val, record.key, "price")}
@@ -119,7 +117,7 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
     {
       title: "Amount",
       dataIndex: "amount",
-      width: 120,
+      width: 160,
       render: (_: any, record: Item) => (
         <Text>Rp {(record.qty * record.price).toLocaleString("id-ID")}</Text>
       ),
@@ -128,7 +126,12 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
       title: "",
       width: 40,
       render: (_: any, record: Item) => (
-        <Button danger type="text" icon={<DeleteOutlined />} onClick={() => handleDelete(record.key)} />
+        <Button
+          danger
+          type="text"
+          icon={<DeleteOutlined />}
+          onClick={() => handleDelete(record.key)}
+        />
       ),
     },
   ];
@@ -144,35 +147,62 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
         summary={() => (
           <>
             <Table.Summary.Row>
-              <Table.Summary.Cell colSpan={3} align="right"><Text strong>Subtotal</Text></Table.Summary.Cell>
-              <Table.Summary.Cell colSpan={1}>Rp {subtotal.toLocaleString("id-ID")}</Table.Summary.Cell>
+              <Table.Summary.Cell index={0} colSpan={3} align="right">
+                <Text strong>Subtotal</Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell index={3} colSpan={1}>
+                Rp {subtotal.toLocaleString("id-ID")}
+              </Table.Summary.Cell>
             </Table.Summary.Row>
             <Table.Summary.Row>
-              <Table.Summary.Cell colSpan={3} align="right">
+              <Table.Summary.Cell index={0} colSpan={3} align="right">
                 <Space>
                   <Text strong>Discount</Text>
-                  <Select value={discountType} onChange={(val) => setDiscountType(val)} style={{ width: 80 }}>
-                    <Select.Option value="percent">%</Select.Option>
-                    <Select.Option value="nominal">Rp</Select.Option>
+                  <Select
+                    value={discountType}
+                    onChange={(val) => setDiscountType(val)}
+                    style={{ width: 80 }}
+                  >
+                    <Option value="percent">%</Option>
+                    <Option value="nominal">Rp</Option>
                   </Select>
-                  <InputNumber style={{ width: 224 }} min={0} value={discount} onChange={(val) => setDiscount(val || 0)} />
+                  <InputNumber
+                    style={{ width: 180 }}
+                    min={0}
+                    value={discount}
+                    onChange={(val) => setDiscount(val || 0)}
+                  />
                 </Space>
               </Table.Summary.Cell>
-              <Table.Summary.Cell colSpan={1}>- Rp {discountAmount.toLocaleString("id-ID")}</Table.Summary.Cell>
+              <Table.Summary.Cell index={3} colSpan={1}>
+                - Rp {discountAmount.toLocaleString("id-ID")}
+              </Table.Summary.Cell>
             </Table.Summary.Row>
             <Table.Summary.Row>
-              <Table.Summary.Cell colSpan={3} align="right">
+              <Table.Summary.Cell index={0} colSpan={3} align="right">
                 <Space>
                   <Text strong>Tax (%)</Text>
-                  <InputNumber style={{ width: 224 }} min={0} max={100} value={vat} onChange={(val) => setVat(val || 0)} />
+                  <InputNumber
+                    style={{ width: 180 }}
+                    min={0}
+                    max={100}
+                    value={vat}
+                    onChange={(val) => setVat(val || 0)}
+                  />
                 </Space>
               </Table.Summary.Cell>
-              <Table.Summary.Cell colSpan={1}>+ Rp {vatAmount.toLocaleString("id-ID")}</Table.Summary.Cell>
+              <Table.Summary.Cell index={3} colSpan={1}>
+                + Rp {vatAmount.toLocaleString("id-ID")}
+              </Table.Summary.Cell>
             </Table.Summary.Row>
             <Table.Summary.Row>
-              <Table.Summary.Cell colSpan={3} align="right"><Text strong>Total</Text></Table.Summary.Cell>
-              <Table.Summary.Cell colSpan={1}>
-                <Text strong style={{ color: "#1677ff" }}>Rp {total.toLocaleString("id-ID")}</Text>
+              <Table.Summary.Cell index={0} colSpan={3} align="right">
+                <Text strong>Total</Text>
+              </Table.Summary.Cell>
+              <Table.Summary.Cell index={3} colSpan={1}>
+                <Text strong style={{ color: "#1677ff" }}>
+                  Rp {total.toLocaleString("id-ID")}
+                </Text>
               </Table.Summary.Cell>
             </Table.Summary.Row>
           </>
@@ -181,7 +211,9 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
       <Divider />
       <Row justify="start">
         <Col>
-          <Button icon={<PlusOutlined />} type="dashed" onClick={handleAdd}>Add Item</Button>
+          <Button icon={<PlusOutlined />} type="dashed" onClick={handleAdd}>
+            Add Item
+          </Button>
         </Col>
       </Row>
     </div>
