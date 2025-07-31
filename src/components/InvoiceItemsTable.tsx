@@ -107,7 +107,10 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
           style={{ width: "100%" }}
           min={0}
           formatter={(val) => `Rp ${val}`}
-          parser={(val) => val?.replace(/[^\d]/g, "") || ""}
+          parser={(val) => {
+            const cleaned = val?.replace(/[^\d]/g, "") || "0";
+            return Number.isNaN(Number(cleaned)) ? 0 : Number(cleaned);
+          }}
           value={record.price}
           onChange={(val) => handleChange(val, record.key, "price")}
         />
