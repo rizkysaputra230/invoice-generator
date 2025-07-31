@@ -43,6 +43,25 @@ const DashedBox = ({ children }: { children: React.ReactNode }) => (
     {children}
   </div>
 );
+interface InvoiceData {
+  invoiceType: string;
+  invoiceNumber: string;
+  issueDate: string;
+  dueDate: string;
+  fromName: string;
+  fromContact: string;
+  toName: string;
+  toContact: string;
+  items: {
+    description: string;
+    quantity: number;
+    price: number;
+  }[];
+  subtotal: number;
+  discount: number;
+  vat: number;
+  total: number;
+}
 
 const InvoiceForm = () => {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
@@ -50,7 +69,7 @@ const InvoiceForm = () => {
   const [isClient, setIsClient] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
-  const [invoiceData, setInvoiceData] = useState({
+  const [invoiceData, setInvoiceData] = useState<InvoiceData>({
     invoiceType: "Invoice",
     invoiceNumber: "0001",
     issueDate: "",
