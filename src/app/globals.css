@@ -1,4 +1,26 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
 
-@custom-variant dark (&:is(.dark *));
+  .print-preview,
+  .print-preview * {
+    visibility: visible !important;
+  }
+
+  .print-preview {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    background: white;
+    padding: 0;
+    margin: 0;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

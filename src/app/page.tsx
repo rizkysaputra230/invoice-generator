@@ -1,4 +1,6 @@
 import InvoiceGenerator from "@/components/InvoiceForm";
+import './globals.css'; // jika Anda pakai Tailwind CSS
+
 
 export default function Home() {
   return (
