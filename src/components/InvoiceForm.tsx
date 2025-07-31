@@ -230,14 +230,18 @@ const InvoiceForm = () => {
                           <Text strong>Invoice Date</Text>
                           <DatePicker
                             style={{ width: "100%", marginTop: 8 }}
-                            onChange={(_, dateString) => setInvoiceData({ ...invoiceData, issueDate: dateString })}
+                            onChange={(_, dateString) =>
+                              setInvoiceData({ ...invoiceData, issueDate: Array.isArray(dateString) ? dateString[0] : dateString })
+                            }
                           />
                         </DashedBox>
                         <DashedBox>
                           <Text strong>Due date (Optional)</Text>
                           <DatePicker
                             style={{ width: "100%", marginTop: 8 }}
-                            onChange={(_, dateString) => setInvoiceData({ ...invoiceData, dueDate: dateString })}
+                            onChange={(_, dateString) =>
+                              setInvoiceData({ ...invoiceData, dueDate: Array.isArray(dateString) ? dateString[0] : dateString })
+                            }
                           />
                         </DashedBox>
                       </Space>
