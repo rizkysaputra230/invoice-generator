@@ -162,6 +162,12 @@ const InvoiceForm = () => {
     )}
       {/* Main form UI - hidden during print */}
       <div className="no-print">
+      <h1 className="text-6xl !font-black uppercase text-center mb-8
+                    bg-gradient-to-b from-blue-400 to-pink-300
+                    bg-clip-text text-transparent">
+        INVOICE GENERATOR
+      </h1>
+
         <Row gutter={24}>
           {/* Left section - main form */}
           <Col span={18}>

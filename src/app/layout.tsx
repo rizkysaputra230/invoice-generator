@@ -6,6 +6,9 @@ import type { Metadata } from 'next';
 import { ConfigProvider } from 'antd';
 import idID from 'antd/locale/id_ID'; // lokal Indonesia, opsional
 import { ReactNode } from 'react';
+// app/layout.tsx
+import { Playfair_Display } from 'next/font/google';
+
 
 export const metadata: Metadata = {
   title: 'Invoice Generator',
