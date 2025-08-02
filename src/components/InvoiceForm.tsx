@@ -24,7 +24,13 @@ import {
 } from "@ant-design/icons";
 import { v4 as uuidv4 } from "uuid";
 import InvoiceItemsTable from "./InvoiceItemsTable";
-import InvoicePrintPreview from "./templates/InvoicePrintPreview";
+import InvoicePrintPreviewDefault from "./templates/InvoicePrintPreviewDefault";
+import InvoicePrintPreviewModern from "./templates/InvoicePrintPreviewModern";
+import InvoicePrintPreviewClassic from "./templates/InvoicePrintPreviewClassic";
+import InvoicePrintPreviewClean from "./templates/InvoicePrintPreviewClean";
+import InvoicePrintPreviewMinimal from "./templates/InvoicePrintPreviewMinimal";
+import InvoicePrintPreviewColorful from "./templates/InvoicePrintPreviewColorful";
+import TemplateSelector from "./TemplateSelector";
 
 const { TextArea } = Input;
 const { Text } = Typography;
@@ -68,7 +74,7 @@ const InvoiceForm = () => {
   const printRef = useRef<HTMLDivElement>(null);
   const [isClient, setIsClient] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
-
+  const [selectedTemplate, setSelectedTemplate] = useState("classic");
   const [invoiceData, setInvoiceData] = useState<InvoiceData>({
     invoiceType: "Invoice",
     invoiceNumber: "0001",
@@ -133,6 +139,145 @@ const InvoiceForm = () => {
       .save();
   };
 
+  const renderSelectedTemplate = () => {
+    switch (selectedTemplate) {
+      case "blank":
+        return (
+          <InvoicePrintPreviewDefault
+            logoUrl={logoUrl}
+            invoiceNumber={invoiceData.invoiceNumber}
+            invoiceType={invoiceData.invoiceType}
+            issueDate={invoiceData.issueDate}
+            dueDate={invoiceData.dueDate}
+            fromName={invoiceData.fromName}
+            fromContact={invoiceData.fromContact}
+            toName={invoiceData.toName}
+            toContact={invoiceData.toContact}
+            items={invoiceData.items}
+            subtotal={invoiceData.subtotal}
+            discount={invoiceData.discount}
+            vat={invoiceData.vat}
+            total={invoiceData.total}
+          />
+        );
+      case "modern":
+        return (
+          <InvoicePrintPreviewModern
+            logoUrl={logoUrl}
+            invoiceNumber={invoiceData.invoiceNumber}
+            invoiceType={invoiceData.invoiceType}
+            issueDate={invoiceData.issueDate}
+            dueDate={invoiceData.dueDate}
+            fromName={invoiceData.fromName}
+            fromContact={invoiceData.fromContact}
+            toName={invoiceData.toName}
+            toContact={invoiceData.toContact}
+            items={invoiceData.items}
+            subtotal={invoiceData.subtotal}
+            discount={invoiceData.discount}
+            vat={invoiceData.vat}
+            total={invoiceData.total}
+          />
+        );
+      case "classic":
+        return (
+          <InvoicePrintPreviewClassic
+            logoUrl={logoUrl}
+            invoiceNumber={invoiceData.invoiceNumber}
+            invoiceType={invoiceData.invoiceType}
+            issueDate={invoiceData.issueDate}
+            dueDate={invoiceData.dueDate}
+            fromName={invoiceData.fromName}
+            fromContact={invoiceData.fromContact}
+            toName={invoiceData.toName}
+            toContact={invoiceData.toContact}
+            items={invoiceData.items}
+            subtotal={invoiceData.subtotal}
+            discount={invoiceData.discount}
+            vat={invoiceData.vat}
+            total={invoiceData.total}
+          />
+        );
+      case "clean":
+        return (
+          <InvoicePrintPreviewClean
+            logoUrl={logoUrl}
+            invoiceNumber={invoiceData.invoiceNumber}
+            invoiceType={invoiceData.invoiceType}
+            issueDate={invoiceData.issueDate}
+            dueDate={invoiceData.dueDate}
+            fromName={invoiceData.fromName}
+            fromContact={invoiceData.fromContact}
+            toName={invoiceData.toName}
+            toContact={invoiceData.toContact}
+            items={invoiceData.items}
+            subtotal={invoiceData.subtotal}
+            discount={invoiceData.discount}
+            vat={invoiceData.vat}
+            total={invoiceData.total}
+          />
+        );
+      case "minimal":
+        return (
+          <InvoicePrintPreviewMinimal
+            logoUrl={logoUrl}
+            invoiceNumber={invoiceData.invoiceNumber}
+            invoiceType={invoiceData.invoiceType}
+            issueDate={invoiceData.issueDate}
+            dueDate={invoiceData.dueDate}
+            fromName={invoiceData.fromName}
+            fromContact={invoiceData.fromContact}
+            toName={invoiceData.toName}
+            toContact={invoiceData.toContact}
+            items={invoiceData.items}
+            subtotal={invoiceData.subtotal}
+            discount={invoiceData.discount}
+            vat={invoiceData.vat}
+            total={invoiceData.total}
+          />
+        );
+      case "colorful":
+        return (
+          <InvoicePrintPreviewColorful
+            logoUrl={logoUrl}
+            invoiceNumber={invoiceData.invoiceNumber}
+            invoiceType={invoiceData.invoiceType}
+            issueDate={invoiceData.issueDate}
+            dueDate={invoiceData.dueDate}
+            fromName={invoiceData.fromName}
+            fromContact={invoiceData.fromContact}
+            toName={invoiceData.toName}
+            toContact={invoiceData.toContact}
+            items={invoiceData.items}
+            subtotal={invoiceData.subtotal}
+            discount={invoiceData.discount}
+            vat={invoiceData.vat}
+            total={invoiceData.total}
+          />
+        );
+      // Tambahkan lagi case-case untuk template lainnya
+      default:
+        return (
+          <InvoicePrintPreviewClassic
+            logoUrl={logoUrl}
+            invoiceNumber={invoiceData.invoiceNumber}
+            invoiceType={invoiceData.invoiceType}
+            issueDate={invoiceData.issueDate}
+            dueDate={invoiceData.dueDate}
+            fromName={invoiceData.fromName}
+            fromContact={invoiceData.fromContact}
+            toName={invoiceData.toName}
+            toContact={invoiceData.toContact}
+            items={invoiceData.items}
+            subtotal={invoiceData.subtotal}
+            discount={invoiceData.discount}
+            vat={invoiceData.vat}
+            total={invoiceData.total}
+          />
+        );
+    }
+  };
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -142,22 +287,7 @@ const InvoiceForm = () => {
       {/* Hidden print preview for printing only */}
     {isClient && (
       <div ref={printRef} className="print-preview" style={{ display: 'none' }}>
-        <InvoicePrintPreview
-          logoUrl={logoUrl}
-          invoiceNumber={invoiceData.invoiceNumber}
-          invoiceType={invoiceData.invoiceType}
-          issueDate={invoiceData.issueDate}
-          dueDate={invoiceData.dueDate}
-          fromName={invoiceData.fromName}
-          fromContact={invoiceData.fromContact}
-          toName={invoiceData.toName}
-          toContact={invoiceData.toContact}
-          items={invoiceData.items}
-          subtotal={invoiceData.subtotal}
-          discount={invoiceData.discount}
-          vat={invoiceData.vat}
-          total={invoiceData.total}
-        />
+        {renderSelectedTemplate()}
       </div>
     )}
       {/* Main form UI - hidden during print */}
@@ -167,6 +297,8 @@ const InvoiceForm = () => {
                     bg-clip-text text-transparent">
         INVOICE GENERATOR
       </h1>
+
+      <TemplateSelector selected={selectedTemplate} onSelect={setSelectedTemplate} />
 
         <Row gutter={24}>
           {/* Left section - main form */}

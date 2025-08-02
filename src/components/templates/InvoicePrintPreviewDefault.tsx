@@ -83,8 +83,8 @@ const InvoicePrintPreview: React.FC<InvoicePrintPreviewProps> = ({
         fontFamily: "Segoe UI, sans-serif",
         color: "#333",
         borderRadius: 10,
-        boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
-        border: "1px solid #e5e5e5",
+        // boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+        // border: "1px solid #e5e5e5",
       }}
     >
       {/* Header */}
