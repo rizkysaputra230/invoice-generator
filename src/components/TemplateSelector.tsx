@@ -1,4 +1,3 @@
-// TemplateSelector.tsx
 "use client";
 
 import React from "react";
@@ -25,28 +24,42 @@ const TemplateSelector: React.FC<TemplateSelectorProps> = ({ selected, onSelect 
   return (
     <div className="mb-10">
       <h2 className="text-lg font-semibold mb-4 text-center">Choose Template</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+
+      <div
+        className="
+          flex gap-4 overflow-x-auto snap-x snap-mandatory sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6
+          sm:overflow-visible no-scrollbar
+        "
+      >
         {templates.map((tpl) => (
-        <Card
+          <div
             key={tpl.key}
-            hoverable
-            className={`transition border rounded-lg overflow-hidden p-1 shadow-sm cursor-pointer ${
-                selected === tpl.key ? "border-blue-700 ring-2 ring-blue-500" : "hover:shadow-md"
-            }`}
-            onClick={() => onSelect(tpl.key)}
-            style={{ padding: 8, textAlign: "center", height: 400 }}
+            className="
+              snap-start flex-shrink-0 w-screen px-4 sm:w-auto sm:px-0
+            "
+          >
+            <Card
+              hoverable
+              className={`
+                transition border rounded-lg overflow-hidden p-1 shadow-sm cursor-pointer h-full
+                ${selected === tpl.key ? "border-blue-700 ring-2 ring-blue-500" : "hover:shadow-md"}
+              `}
+              onClick={() => onSelect(tpl.key)}
+              style={{ textAlign: "center" }}
             >
-            <div className="relative w-full h-80 bg-gray-100 overflow-hidden rounded">
+              <div className="relative w-full aspect-[3/4] bg-gray-100 overflow-hidden rounded">
                 <Image
-                src={tpl.preview}
-                alt={tpl.name}
-                width={800}
-                height={1000}
-                className="object-contain"
+                  src={tpl.preview}
+                  alt={tpl.name}
+                  fill
+                  className="object-contain"
                 />
-            </div>
-            <Text className="text-sm font-semibold block mt-2 text-gray-800">{tpl.name}</Text>
-        </Card>
+              </div>
+              <Text className="text-sm font-semibold block mt-2 text-gray-800">
+                {tpl.name}
+              </Text>
+            </Card>
+          </div>
         ))}
       </div>
     </div>

@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import {
   Table,
@@ -76,6 +74,7 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
     {
       title: "Item",
       dataIndex: "item",
+      width: 200,
       render: (_: any, record: Item) => (
         <Input
           value={record.item}
@@ -86,7 +85,7 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
     {
       title: "Qty",
       dataIndex: "qty",
-      width: 180,
+      width: 100,
       render: (_: any, record: Item) => (
         <InputNumber
           style={{ width: "100%" }}
@@ -99,16 +98,13 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
     {
       title: "Price",
       dataIndex: "price",
-      width: 180,
+      width: 140,
       render: (_: any, record: Item) => (
         <InputNumber
           style={{ width: "100%" }}
           min={0}
           formatter={(val) => `Rp ${val}`}
-          parser={(val) => {
-            const cleaned = val?.replace(/[^\d]/g, "") || "0";
-            return Number(cleaned);
-          }}
+          parser={(val) => val?.replace(/[^\d]/g, "") || "0"}
           value={record.price}
           onChange={(val) => handleChange(val, record.key, "price")}
         />
@@ -117,7 +113,7 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
     {
       title: "Amount",
       dataIndex: "amount",
-      width: 160,
+      width: 140,
       render: (_: any, record: Item) => (
         <Text>Rp {(record.qty * record.price).toLocaleString("id-ID")}</Text>
       ),
@@ -137,13 +133,14 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
   ];
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       <Table
         columns={columns}
         dataSource={items}
         pagination={false}
         bordered
         size="middle"
+        scroll={{ x: 600 }}
         summary={() => (
           <>
             <Table.Summary.Row>
@@ -156,7 +153,7 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
             </Table.Summary.Row>
             <Table.Summary.Row>
               <Table.Summary.Cell index={0} colSpan={3} align="right">
-                <Space>
+                <Space wrap>
                   <Text strong>Discount</Text>
                   <Select
                     value={discountType}
@@ -167,7 +164,7 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
                     <Option value="nominal">Rp</Option>
                   </Select>
                   <InputNumber
-                    style={{ width: 180 }}
+                    style={{ width: 140 }}
                     min={0}
                     value={discount}
                     onChange={(val) => setDiscount(val || 0)}
@@ -180,10 +177,10 @@ const InvoiceItemsTable: React.FC<Props> = ({ onChange }) => {
             </Table.Summary.Row>
             <Table.Summary.Row>
               <Table.Summary.Cell index={0} colSpan={3} align="right">
-                <Space>
+                <Space wrap>
                   <Text strong>Tax (%)</Text>
                   <InputNumber
-                    style={{ width: 180 }}
+                    style={{ width: 140 }}
                     min={0}
                     max={100}
                     value={vat}
